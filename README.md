@@ -22,13 +22,13 @@ This would ensure all the data needed to run the other code is in place
 Now you can follow the lab instructions to show the following capabilities
 
 - Lab #1: BigQuery Data Preparation - use YAML files for upload to Data Preparation
-  - [Code](retail-demo/src/other%20code/Exchange%20Rates%20data%20preparation.dp.yaml)
-  - [Code](retail-demo/src/other%20code/Orders%20data%20preparation.dp.yaml)
+  - [Code](/src/other%20code/Exchange%20Rates%20data%20preparation.dp.yaml)
+  - [Code](/src/other%20code/Orders%20data%20preparation.dp.yaml)
 - Lab #2: Data Insights - Generate Insights for Customers table and show table and column level descriptions
 - Lab #3: Data Canvas as notebooks - Agentic Data Analysis
-  - [Code](retail-demo/src/other%20code/Orders%20notebook.ipynb)
-  - [Code](retail-demo/src/other%20code/Sales%20and%20Customers.ipynb)
+  - [Code](/src/other%20code/Orders%20notebook.ipynb)
+  - [Code](/src/other%20code/Sales%20and%20Customers.ipynb)
 - Lab #3: TimesFM forecasting notebook
-  - [Code](retail-demo/src/other%20code/Sales%20Forecasting%20and%20CA.ipynb)
+  - [Code](/src/other%20code/Sales%20Forecasting%20and%20CA.ipynb)
 - Lab #4: AI.Generate and Vector Search
-  - [Code](retail-demo/src/other%20code/Product%20Descriptions%20generation.sql)
+  - [Code](/src/other%20code/Product%20Descriptions%20generation.sql)
