@@ -1,0 +1,50 @@
+nodes:
+- id: generated-source-node
+  source:
+    table: {project: "to-do-developer", dataset: "to-do-developer", table: exchange_rates}
+  steps:
+  - id: manual-columnStep-3C62BA4F-176E-4CC6-B477-63766DB5CFB9
+    description: Extract the year and month from the date column
+    columnStep:
+      columnName: date_month
+      expression: {sql: 'FORMAT_DATETIME(''%Y-%m'', date)'}
+    generated: {columnStepType: COLUMN_STEP_TYPE_ADD_COLUMN}
+  generated:
+    sections:
+    - {type: SECTION_SOURCE_TABLE, label: Read from BigQuery table project.dataset.exchange_rates}
+    - type: SECTION_SQL
+      label: |
+        Format the 'date' column into 'YYYY-MM' format as 'date_month' and select all columns.
+    - {type: SECTION_DESTINATION_TABLE, label: Write into BigQuery table project.dataset.exchange_rates_dp}
+    outputSchema:
+      field:
+      - {name: date, type: DATETIME, mode: NULLABLE}
+      - {name: currency, type: STRING, mode: NULLABLE}
+      - {name: exchange_rate, type: FLOAT64, mode: NULLABLE}
+      - {name: base_currency, type: STRING, mode: NULLABLE}
+      - {name: date_month, type: STRING, mode: NULLABLE}
+    sourceGenerated:
+      sourceSchema:
+        tableSchema:
+          field:
+          - {name: date, type: DATETIME, mode: NULLABLE}
+          - {name: currency, type: STRING, mode: NULLABLE}
+          - {name: exchange_rate, type: FLOAT, mode: NULLABLE}
+          - {name: base_currency, type: STRING, mode: NULLABLE}
+    destinationGenerated:
+      schema:
+        field:
+        - {name: date, type: DATETIME, mode: NULLABLE}
+        - {name: currency, type: STRING, mode: NULLABLE}
+        - {name: exchange_rate, type: FLOAT64, mode: NULLABLE}
+        - {name: base_currency, type: STRING, mode: NULLABLE}
+        - {name: date_month, type: STRING, mode: NULLABLE}
+      selectedFieldsExpression: CAST(`date` AS DATETIME) AS `date`,CAST(`currency`
+        AS STRING) AS `currency`,CAST(`exchange_rate` AS FLOAT64) AS `exchange_rate`,CAST(`base_currency`
+        AS STRING) AS `base_currency`,CAST(`date_month` AS STRING) AS `date_month`
+  destination:
+    table: {project: "to-do-developer", dataset: "to-do-developer", table: exchange_rates_dp}
+generated:
+  location: US
+  description: |
+    Format the 'date' column to 'YYYY-MM' and select all columns.

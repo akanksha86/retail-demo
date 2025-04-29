@@ -1,0 +1,100 @@
+nodes:
+- id: generated-source-node
+  source:
+    table: {project: "to-do-developer", dataset: "to-do-developer", table: orders}
+  steps:
+  - id: manual-columnStep-942D40B0-9141-440D-875A-CE6A293DBBA4
+    description: Extract the date part from the order_date column
+    columnStep:
+      columnName: order_date
+      expression: {sql: DATE(order_date)}
+    generated: {columnStepType: COLUMN_STEP_TYPE_REPLACE_COLUMN}
+  - id: manual-columnStep-D6ECAB6E-D08A-4D05-AAF8-A26E6BB13074
+    description: Create a new field order_month by extracting year and month from
+      order_date
+    columnStep:
+      columnName: order_month
+      expression: {sql: 'FORMAT_DATE(''%Y-%m'', order_date)'}
+    generated: {columnStepType: COLUMN_STEP_TYPE_ADD_COLUMN}
+  - id: manual-filterStep-28088AD5-C34B-48A3-B344-084CBE8507AB
+    description: is_returned is false
+    filterStep:
+      expression: {sql: is_returned = false}
+      filterType: VALIDATION
+  generated:
+    sections:
+    - {type: SECTION_SOURCE_TABLE, label: Read from BigQuery table project.dataset.orders}
+    - type: SECTION_SQL
+      label: |
+        Create a series of common table expressions (CTEs): s0 selects all columns from the 'orders' table, s1 adds a date column 'order_date' derived from the 'order_date' column in s0, s2 adds a formatted date column 'order_month' in 'YYYY-MM' format derived from the 'order_date' column in s1, and s3 filters s2 to include only rows where 'is_returned' is false, then select all columns from s3.
+    - {type: SECTION_DESTINATION_TABLE, label: Write into BigQuery table project.dataset.orders_dp}
+    outputSchema:
+      field:
+      - {name: order_id, type: STRING, mode: NULLABLE}
+      - {name: customer_id, type: STRING, mode: NULLABLE}
+      - {name: order_date, type: DATE, mode: NULLABLE}
+      - {name: status, type: STRING, mode: NULLABLE}
+      - {name: payment_method, type: STRING, mode: NULLABLE}
+      - {name: shipping_method, type: STRING, mode: NULLABLE}
+      - {name: subtotal, type: FLOAT64, mode: NULLABLE}
+      - {name: shipping_cost, type: FLOAT64, mode: NULLABLE}
+      - {name: tax_amount, type: FLOAT64, mode: NULLABLE}
+      - {name: total_amount, type: FLOAT64, mode: NULLABLE}
+      - {name: currency, type: STRING, mode: NULLABLE}
+      - {name: currency_symbol, type: STRING, mode: NULLABLE}
+      - {name: formatted_total, type: STRING, mode: NULLABLE}
+      - {name: is_returned, type: BOOLEAN, mode: NULLABLE}
+      - {name: order_month, type: STRING, mode: NULLABLE}
+    sourceGenerated:
+      sourceSchema:
+        tableSchema:
+          field:
+          - {name: order_id, type: STRING, mode: NULLABLE}
+          - {name: customer_id, type: STRING, mode: NULLABLE}
+          - {name: order_date, type: DATETIME, mode: NULLABLE}
+          - {name: status, type: STRING, mode: NULLABLE}
+          - {name: payment_method, type: STRING, mode: NULLABLE}
+          - {name: shipping_method, type: STRING, mode: NULLABLE}
+          - {name: subtotal, type: FLOAT, mode: NULLABLE}
+          - {name: shipping_cost, type: FLOAT, mode: NULLABLE}
+          - {name: tax_amount, type: FLOAT, mode: NULLABLE}
+          - {name: total_amount, type: FLOAT, mode: NULLABLE}
+          - {name: currency, type: STRING, mode: NULLABLE}
+          - {name: currency_symbol, type: STRING, mode: NULLABLE}
+          - {name: formatted_total, type: STRING, mode: NULLABLE}
+          - {name: is_returned, type: BOOLEAN, mode: NULLABLE}
+    destinationGenerated:
+      schema:
+        field:
+        - {name: order_id, type: STRING, mode: NULLABLE}
+        - {name: customer_id, type: STRING, mode: NULLABLE}
+        - {name: order_date, type: DATE, mode: NULLABLE}
+        - {name: status, type: STRING, mode: NULLABLE}
+        - {name: payment_method, type: STRING, mode: NULLABLE}
+        - {name: shipping_method, type: STRING, mode: NULLABLE}
+        - {name: subtotal, type: FLOAT64, mode: NULLABLE}
+        - {name: shipping_cost, type: FLOAT64, mode: NULLABLE}
+        - {name: tax_amount, type: FLOAT64, mode: NULLABLE}
+        - {name: total_amount, type: FLOAT64, mode: NULLABLE}
+        - {name: currency, type: STRING, mode: NULLABLE}
+        - {name: currency_symbol, type: STRING, mode: NULLABLE}
+        - {name: formatted_total, type: STRING, mode: NULLABLE}
+        - {name: is_returned, type: BOOLEAN, mode: NULLABLE}
+        - {name: order_month, type: STRING, mode: NULLABLE}
+      selectedFieldsExpression: CAST(`order_id` AS STRING) AS `order_id`,CAST(`customer_id`
+        AS STRING) AS `customer_id`,CAST(`order_date` AS DATE) AS `order_date`,CAST(`status`
+        AS STRING) AS `status`,CAST(`payment_method` AS STRING) AS `payment_method`,CAST(`shipping_method`
+        AS STRING) AS `shipping_method`,CAST(`subtotal` AS FLOAT64) AS `subtotal`,CAST(`shipping_cost`
+        AS FLOAT64) AS `shipping_cost`,CAST(`tax_amount` AS FLOAT64) AS `tax_amount`,CAST(`total_amount`
+        AS FLOAT64) AS `total_amount`,CAST(`currency` AS STRING) AS `currency`,CAST(`currency_symbol`
+        AS STRING) AS `currency_symbol`,CAST(`formatted_total` AS STRING) AS `formatted_total`,CAST(`is_returned`
+        AS BOOLEAN) AS `is_returned`,CAST(`order_month` AS STRING) AS `order_month`
+  destination:
+    table: {project: "to-do-developer", dataset: "to-do-developer", table: orders_dp}
+generated:
+  location: US
+  description: |
+    Replace the order_date column with its date part, format the order_date column to year-month format, filter out returned orders, and select all columns.
+configuration:
+  errorTable: {project: "to-do-developer", dataset: "to-do-developer", table: returned_orders}
+  errorTableDataExpirationDays: 30.0
